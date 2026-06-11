@@ -14,7 +14,10 @@ Para resolver este problema, vas a necesitar una herramienta para eliminar eleme
 ### 1. El método splice
 Este método de los arreglos nos permite eliminar un elemento a partir de su posición o índice. 
 
-La sintaxis es: arreglo.splice(indice, cantidad)
+La sintaxis es: 
+```js
+arreglo.splice(indice, cantidad)
+```
 
 Por ejemplo, si tenemos un arreglo de frutas:
 ```js 
