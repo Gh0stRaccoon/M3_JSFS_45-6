@@ -26,37 +26,52 @@ const participantes = [
     "Damazo Sepúlveda"
 ];
 
-const colores = [
-    "azul",
-    "rojo",
-    "violeta",
-    "morado"
-]
-
+// Función base que genera un número al azar entre un mínimo y un máximo
 function lanzarRuleta(min, max) {
-    const numeroAleatorio = Math.random() // entre 0 y <1
-
-    const resultado = Math.floor(numeroAleatorio * (max - min + 1)) + min
-
-    return resultado
+    const numeroAleatorio = Math.random(); // Genera decimal entre 0 y <1
+    const resultado = Math.floor(numeroAleatorio * (max - min + 1)) + min;
+    return resultado;
 }
 
+// ⚠️ PUNTO DE INEFICIENCIA: Esta función devuelve el TEXTO (nombre), no la posición.
 function aleatorioDesdeArreglo(arreglo) {
-    const index = lanzarRuleta(0, arreglo.length - 1)
-    const elementoArreglo = arreglo[index]
-
-    return elementoArreglo
+    const index = lanzarRuleta(0, arreglo.length - 1);
+    const elementoArreglo = arreglo[index]; // Obtenemos el nombre
+    return elementoArreglo; // Perdemos el 'index', solo devolvemos el string
 }
 
+// Función para inyectar texto en el HTML
 function renderizarResultado(idElement, texto) {
-    const elementoARenderizar = document.getElementById(idElement)
-
-    elementoARenderizar.textContent = texto
+    const elementoARenderizar = document.getElementById(idElement);
+    elementoARenderizar.textContent = texto;
 }
 
-const getRandomButton = document.querySelector("#getRandom")
+// ⚠️ PUNTO DE INEFICIENCIA: Como perdimos la posición, tenemos que usar indexOf.
+function eliminarDesdeArreglo(arreglo, contenido) {
+    // indexOf obliga a JavaScript a recorrer el arreglo desde cero hasta encontrar el texto
+    const indexParticipante = arreglo.indexOf(contenido);
+    arreglo.splice(indexParticipante, 1);
+}
+
+// Función que revisa el estado del juego antes de renderizar
+function validarYRenderizar(arreglo, resultado) {
+    if (!arreglo.length) {
+        renderizarResultado("resultado", "Ya todos participaron");
+        setTimeout(() => window.location.reload(), 2000);
+    } else {
+        renderizarResultado("resultado", resultado);
+    }
+}
+
+const getRandomButton = document.querySelector("#getRandom");
 
 getRandomButton.addEventListener("click", () => {
-    const resultado = aleatorioDesdeArreglo(participantes)  
-    renderizarResultado("resultado", resultado)
-})
+    // 1. Obtenemos el nombre (y perdemos su posición original)
+    const resultado = aleatorioDesdeArreglo(participantes);
+
+    // 2. Mostramos el nombre en pantalla
+    validarYRenderizar(participantes, resultado);
+
+    // 3. Volvemos a buscar el nombre en la lista para eliminarlo
+    eliminarDesdeArreglo(participantes, resultado);
+});
