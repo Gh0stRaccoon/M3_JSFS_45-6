@@ -1,9 +1,9 @@
 // OBJETOS
 const mascota = {
-    nombre: "Guliber Meridio III",
+    nombre: "Galletita",
     tipo: "slime",
-    energia: 50,
-    saciedad: 50,
+    energia: 10,
+    saciedad: 10,
     estaVivo: true,
     aliases: ["Meri", "Guli"],
     outfit: {
@@ -36,7 +36,7 @@ const mascota = {
 
     },
     jugar: function () {
-        this.energia -= 20
+        this.energia -= 30
         this.saciedad -= 20
 
         if (!this.estaVivo) {
@@ -52,8 +52,8 @@ const mascota = {
             return
         }
 
-        if (this.energía < 0) {
-            this.energía = 0
+        if (this.energia < 0) {
+            this.energia = 0
             console.log(`${this.nombre} no tiene energía suficiente :c`)
         }
 
@@ -87,24 +87,44 @@ const comidas = [
     }
 ]
 
-console.log(mascota.aliases[1])
-console.log(mascota.outfit.accesorio)
-console.log(mascota.estaVivo)
-mascota.jugar()
-mascota.comer(comidas[0])
-mascota.comer()
-mascota.comer()
-mascota.comer()
-mascota.comer()
-mascota.comer()
-mascota.jugar()
-mascota.jugar()
-mascota.jugar()
-mascota.jugar()
-mascota.jugar()
-mascota.jugar()
-mascota.jugar()
-mascota.jugar()
-mascota.jugar()
-mascota.comer()
-mascota.jugar()
+// UI - User Interface _ UX User Experience
+function actualizarUI() {
+    const mascotaNombre = document.getElementById('mascota-nombre')
+    const mascotaTipo = document.getElementById('mascota-tipo')
+    const mascotaEnergia = document.getElementById('mascota-energia')
+    const mascotaSaciedad = document.getElementById('mascota-saciedad')
+
+    mascotaNombre.textContent = mascota.nombre
+    mascotaTipo.textContent = mascota.tipo
+    mascotaEnergia.style.width = `${mascota.energia}%`
+    mascotaEnergia.textContent = `Energía: ${mascota.energia}%`
+    mascotaSaciedad.style.width = `${mascota.saciedad}%`
+    mascotaSaciedad.textContent = `Saciedad: ${mascota.saciedad}%`
+
+    setTimeout(() => {
+        const mascotaImg = document.getElementById('mascota-img')
+        mascotaImg.src = "./assets/img/pet-standby.png"
+    }, 1000)
+}
+
+const btnComer = document.getElementById('btn-comer')
+const btnJugar = document.getElementById('btn-jugar')
+
+btnComer.addEventListener('click', () => {
+    const mascotaImg = document.getElementById('mascota-img')
+    mascota.comer()
+    mascotaImg.src = "./assets/img/pet-eating.png"
+    actualizarUI()
+})
+
+btnJugar.addEventListener('click', () => {
+    const mascotaImg = document.getElementById('mascota-img')
+    mascota.jugar()
+    mascotaImg.src = "./assets/img/pet-play.png"
+    actualizarUI()
+})
+
+const mascotaImg = document.getElementById('mascota-img')
+mascotaImg.src = "./assets/img/pet-standby.png"
+
+actualizarUI()
